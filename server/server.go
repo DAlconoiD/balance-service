@@ -6,6 +6,8 @@ import (
 	"net/http"
 )
 
+
+//Server represents a server
 type Server struct {
 	router *mux.Router
 }
@@ -23,7 +25,7 @@ func (s *Server) Start(address string) error {
 
 //ConfigureRouter binds handles to routes
 func (s *Server) ConfigureRouter(storage storage.Store) {
-	s.router.HandleFunc("/hello", handleHello()).Methods("GET")
+	s.router.HandleFunc("/alive", handleAlive()).Methods("GET")
 	s.router.HandleFunc("/{id:[0-9]+}", handleGetBalance(storage)).Methods("GET")
 	s.router.HandleFunc("/transactions/{id:[0-9]+}", handleGetTransactions(storage)).Methods("GET")
 	s.router.HandleFunc("/transfer", handleTransfer(storage)).Methods("POST")

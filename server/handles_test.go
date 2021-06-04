@@ -18,11 +18,11 @@ import (
 	"time"
 )
 
-func TestHelloHandle(t *testing.T) {
+func TestAliveHandle(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/hello", nil)
 
 	rr := httptest.NewRecorder()
-	handler := handleHello()
+	handler := handleAlive()
 	handler.ServeHTTP(rr, req)
 
 	assert.Equal(t, rr.Code, http.StatusOK)

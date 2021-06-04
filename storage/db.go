@@ -9,12 +9,14 @@ import (
 	"time"
 )
 
+//Database represents a real database
 type Database struct {
 	Db         *gorm.DB
 	ConnString string
 	PaginationNum int
 }
 
+//Open establishes a connection to database
 func (db *Database) Open() error {
 	var err error
 	db.Db, err = gorm.Open(postgres.Open(db.ConnString), &gorm.Config{})
@@ -22,16 +24,9 @@ func (db *Database) Open() error {
 		return err
 	}
 	return nil
-	/*err = db.Db.AutoMigrate(&models.Account{})
-	if err != nil {
-		return err
-	}
-	err = db.Db.AutoMigrate(&models.Transaction{})
-	if err != nil {
-	return err
-	}*/
 }
 
+//GetBalance returns account with id=id
 func (db *Database) GetBalance(id int) (*models.Account, *models.CustomErr) {
 	var account = &models.Account{}
 	result := db.Db.First(account, id)
@@ -44,6 +39,7 @@ func (db *Database) GetBalance(id int) (*models.Account, *models.CustomErr) {
 	return account, nil
 }
 
+//GetTransactionHistory returns transaction history sorted by time/sum asc/desc; supports pagination
 func (db *Database) GetTransactionHistory(accId int, sorting string, order string, page int) ([]models.Transaction, *models.CustomErr) {
 	history := make([]models.Transaction, 0, 0)
 
@@ -73,6 +69,7 @@ func (db *Database) GetTransactionHistory(accId int, sorting string, order strin
 	return history, nil
 }
 
+//UpdateBalance changes account balance
 func (db *Database) UpdateBalance(request *models.ChangeBalanceRequest) (*models.Transaction, *models.CustomErr) {
 	tx := db.Db.Begin()
 	now := time.Now()
@@ -99,6 +96,7 @@ func (db *Database) UpdateBalance(request *models.ChangeBalanceRequest) (*models
 	return transaction, nil
 }
 
+//MakeTransfer makes transfer between accounts
 func (db *Database) MakeTransfer(request *models.TransferRequest) (*models.Transaction, *models.CustomErr) {
 	tx := db.Db.Begin()
 	now := time.Now()

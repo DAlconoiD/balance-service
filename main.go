@@ -23,5 +23,6 @@ func main() {
 	}
 	s := server.New()
 	s.ConfigureRouter(db)
+	log.Infof("Starting server on %s", config.ServerAddress)
 	log.Fatal(s.Start(config.ServerAddress))
 }

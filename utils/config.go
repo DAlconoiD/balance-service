@@ -7,17 +7,14 @@ import (
 	"strings"
 )
 
-const (
-	configName = "config"
-	configType = "yaml"
-)
-
+//Config - application config
 type Config struct {
 	ServerAddress      string
 	DBConnectionString string
 	PaginationNumber   int
 }
 
+//LoadConfig loads config from path=p
 func LoadConfig(p string) (*Config, error) {
 	dir := path.Dir(p)
 	_, file := path.Split(p)
@@ -52,11 +49,9 @@ func LoadConfig(p string) (*Config, error) {
 	dbSSL := viper.Get("DB.SSL")
 	config.DBConnectionString = fmt.Sprintf("host=%v user=%v password=%v dbname=%v port=%v sslmode=%v", dbHost, dbUser, dbPwd, dbName, dbPort, dbSSL)
 
-	viper.SetDefault("SERVER.HOST", "localhost")
 	viper.SetDefault("SERVER.PORT", "8080")
-	srvHost := viper.Get("SERVER.HOST")
 	srvPort := viper.Get("SERVER.PORT")
-	config.ServerAddress = fmt.Sprintf("%v:%v", srvHost, srvPort)
+	config.ServerAddress = fmt.Sprintf(":%v", srvPort)
 
 	viper.SetDefault("SETTINGS.PAGINATION_NUM", 10)
 	config.PaginationNumber = viper.GetInt("SETTINGS.PAGINATION_NUM")

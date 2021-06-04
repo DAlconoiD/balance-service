@@ -14,9 +14,9 @@ import (
 	"strings"
 )
 
-func handleHello() http.HandlerFunc {
+func handleAlive() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello World!"))
+		w.WriteHeader(http.StatusOK)
 	}
 }
 
@@ -67,13 +67,13 @@ func handleChangeBalance(storage storage.Store) http.HandlerFunc {
 		v := validator.New()
 		errs := v.Struct(chBR)
 		if errs != nil {
+			w.WriteHeader(http.StatusBadRequest)
 			logMsg := "Validation error(s):\n"
-			fmt.Fprint(w, "Validation error(s): \n")
+			fmt.Fprint(w, "Validation error(s):\n")
 			for _, e := range errs.(validator.ValidationErrors) {
 				w.Write([]byte(fmt.Sprintf("%v\n", e)))
 				logMsg += fmt.Sprintf("[%v]\n", e)
 			}
-			w.WriteHeader(http.StatusBadRequest)
 			log.Error(logMsg)
 			return
 		}
@@ -81,10 +81,10 @@ func handleChangeBalance(storage storage.Store) http.HandlerFunc {
 		transaction, cErr := storage.UpdateBalance(chBR)
 		if cErr != nil {
 			if cErr.ErrorCode != models.ErrorInsufficientFundsCode {
-				http.Error(w, cErr.Err.Error(), http.StatusBadRequest)
+				http.Error(w, cErr.Err.Error(), http.StatusInternalServerError)
 				return
 			}
-			http.Error(w, cErr.Err.Error(), http.StatusInternalServerError)
+			http.Error(w, cErr.Err.Error(), http.StatusForbidden)
 			log.Error(cErr.Err.Error())
 			return
 		}
@@ -120,13 +120,13 @@ func handleTransfer(storage storage.Store) http.HandlerFunc {
 		v := validator.New()
 		errs := v.Struct(tR)
 		if errs != nil {
-			logMsg := "Validation error(s):\n"
-			fmt.Fprint(w, "Validation error(s): ")
-			for _, e := range errs.(validator.ValidationErrors) {
-				logMsg += fmt.Sprintf("[%v]\n", e)
-				w.Write([]byte(fmt.Sprintf("%v", e)))
-			}
 			w.WriteHeader(http.StatusBadRequest)
+			logMsg := "Validation error(s):\n"
+			fmt.Fprint(w, "Validation error(s):\n")
+			for _, e := range errs.(validator.ValidationErrors) {
+				w.Write([]byte(fmt.Sprintf("%v\n", e)))
+				logMsg += fmt.Sprintf("[%v]\n", e)
+			}
 			log.Error(logMsg)
 			return
 		}
@@ -134,10 +134,10 @@ func handleTransfer(storage storage.Store) http.HandlerFunc {
 		transaction, cErr := storage.MakeTransfer(tR)
 		if cErr != nil {
 			if cErr.ErrorCode != models.ErrorInsufficientFundsCode {
-				http.Error(w, cErr.Err.Error(), http.StatusBadRequest)
+				http.Error(w, cErr.Err.Error(), http.StatusInternalServerError)
 				return
 			}
-			http.Error(w, cErr.Err.Error(), http.StatusInternalServerError)
+			http.Error(w, cErr.Err.Error(), http.StatusForbidden)
 			log.Error(cErr.Err.Error())
 			return
 		}
@@ -205,7 +205,7 @@ func handleGetTransactions(storage storage.Store) http.HandlerFunc {
 
 		history, cErr := storage.GetTransactionHistory(id, sorting, order, page)
 		if cErr != nil {
-			http.Error(w, cErr.Err.Error(), http.StatusBadRequest)
+			http.Error(w, cErr.Err.Error(), http.StatusInternalServerError)
 			log.Error(cErr.Err.Error())
 			return
 		}

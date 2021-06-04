@@ -1,4 +1,5 @@
 *.db
-#*.yaml
+*.sql
+*.md
 .idea*
 *.exe

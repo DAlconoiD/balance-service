@@ -1,0 +1,11 @@
+SERVER:
+  PORT: 8081
+DB:
+  HOST: pg_balance
+  USER: postgres
+  PASSWORD: password
+  NAME: balance
+  PORT: 5432
+  SSL: disable
+SETTINGS:
+  PAGINATION_NUM: 5
