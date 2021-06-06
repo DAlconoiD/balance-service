@@ -213,12 +213,6 @@ func handleGetTransactions(storage storage.Store) http.HandlerFunc {
 
 		data, err := json.Marshal(history)
 
-		if len(history) == 0 {
-			w.WriteHeader(http.StatusNoContent)
-			w.Write(data)
-			return
-		}
-
 		if err != nil {
 			http.Error(w, fmt.Sprintf("JSON Marshalling failed. [%v]", err), http.StatusInternalServerError)
 			log.Error(err)
