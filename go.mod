@@ -1,4 +1,4 @@
-module github.com/DAlconoiD/balance-service
+module github.com/dalconoid/balance-service
 
 go 1.13
 

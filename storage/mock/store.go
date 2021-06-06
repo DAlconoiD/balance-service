@@ -5,7 +5,7 @@
 package mockdb
 
 import (
-	models "github.com/DAlconoiD/balance-service/models"
+	models "github.com/dalconoid/balance-service/models"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"

@@ -3,8 +3,8 @@ package server
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/DAlconoiD/balance-service/models"
-	"github.com/DAlconoiD/balance-service/storage"
+	"github.com/dalconoid/balance-service/models"
+	"github.com/dalconoid/balance-service/storage"
 	"github.com/go-playground/validator"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
@@ -210,12 +210,15 @@ func handleGetTransactions(storage storage.Store) http.HandlerFunc {
 			return
 		}
 
+
+		data, err := json.Marshal(history)
+
 		if len(history) == 0 {
-			w.Write([]byte("Transaction history is empty"))
+			w.WriteHeader(http.StatusNoContent)
+			w.Write(data)
 			return
 		}
 
-		data, err := json.Marshal(history)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("JSON Marshalling failed. [%v]", err), http.StatusInternalServerError)
 			log.Error(err)

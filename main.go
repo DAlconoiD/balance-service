@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
-	"github.com/DAlconoiD/balance-service/server"
-	"github.com/DAlconoiD/balance-service/storage"
-	"github.com/DAlconoiD/balance-service/utils"
+	"github.com/dalconoid/balance-service/server"
+	"github.com/dalconoid/balance-service/storage"
+	"github.com/dalconoid/balance-service/utils"
 	log "github.com/sirupsen/logrus"
 )
 

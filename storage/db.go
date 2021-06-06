@@ -2,7 +2,7 @@ package storage
 
 import (
 	"fmt"
-	"github.com/DAlconoiD/balance-service/models"
+	"github.com/dalconoid/balance-service/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"strings"

@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/DAlconoiD/balance-service/storage"
+	"github.com/dalconoid/balance-service/storage"
 	"github.com/gorilla/mux"
 	"net/http"
 )

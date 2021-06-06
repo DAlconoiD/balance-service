@@ -1,6 +1,6 @@
 package storage
 
-import "github.com/DAlconoiD/balance-service/models"
+import "github.com/dalconoid/balance-service/models"
 
 //Store is a service data storage interface
 type Store interface {
